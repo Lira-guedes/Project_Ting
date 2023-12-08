@@ -1,4 +1,5 @@
 from ting_file_management.file_management import txt_importer
+import sys
 
 
 def process(path_file, instance):
@@ -7,7 +8,6 @@ def process(path_file, instance):
     for file in instance.data:
         if file["nome_do_arquivo"] == path_file:
             file = True
-            break
 
     if not file:
         lines = txt_importer(path_file)
@@ -17,11 +17,15 @@ def process(path_file, instance):
             "linhas_do_arquivo": lines,
         }
         instance.enqueue(dict_file)
-        print(dict_file)
+        return print(dict_file)
 
 
 def remove(instance):
-    """Aqui irá sua implementação"""
+    try:
+        r = instance.dequeue()
+        print(f"Arquivo {r['nome_do_arquivo']} removido com sucesso")
+    except IndexError:
+        print("Não há elementos", file=sys.stdout)
 
 
 def file_metadata(instance, position):
